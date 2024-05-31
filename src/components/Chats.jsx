@@ -26,13 +26,22 @@ const Chats = () => {
 
   const handleSelect = (u) => {
     dispatch({ type: "CHANGE_USER", payload: u });
+
+    const chats = Object.entries(document.getElementsByClassName("chats"))[0][1];
+    const user = Object.entries(chats.getElementsByClassName(`${u.displayName}`))[0][1];
+    for (let c of chats.childNodes) {
+      if(c.classList.contains("bgColor")){
+        c.classList.remove("bgColor");
+      }
+    }
+    user.classList.add("bgColor");
   };
 
   return (
     <div className="chats" >
       {Object.entries(chats)?.sort((a, b) => b[1].date - a[1].date).map((chat) => (
         <div
-          className={`userChat`}
+          className={`userChat ${chat[1].userInfo?.displayName}`}
           key={chat[0]}
           onClick={() => handleSelect(chat[1].userInfo)}
         >
