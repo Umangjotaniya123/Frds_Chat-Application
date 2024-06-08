@@ -6,16 +6,32 @@ import { ChatContext } from "../Context/ChatContext";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { db, storage } from "../firebase";
 import { v4 as uuid } from "uuid";
-import { serverTimestamp, Timestamp, arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { onSnapshot, serverTimestamp, Timestamp, arrayUnion, doc, updateDoc } from "firebase/firestore";
 
 const Input = () => {
 
     const [text, setText] = useState("");
     const [img, setImg] = useState(null);
+    const [cnt, setCnt] = useState([]);
 
     const { currentUser } = useContext(AuthContext);
     const { data } = useContext(ChatContext);
+    const chatId = data.chatId;
     // console.log(data.chatId);
+
+    useEffect(() => {
+        const getChats = () => {
+            const unsub = onSnapshot(doc(db, "userChats", `${data.user.displayName}`), (doc) => {
+                setCnt(doc.data()[chatId]?.count);
+            });
+
+            return () => {
+                unsub();
+            };
+        };
+
+        data.user.displayName && getChats();
+    }, [data.user.displayName]);
 
     const handleSend = async () => {
 
@@ -49,13 +65,17 @@ const Input = () => {
         await updateDoc(doc(db, "userChats", currentUser.displayName), {
             [data.chatId + ".lastMessage"]: {
                 text,
+                count: 'count',
             },
             [data.chatId + ".date"]: serverTimestamp(),
         });
 
         await updateDoc(doc(db, "userChats", data.user.displayName), {
+            [data.chatId + ".count"]: cnt + 1,
             [data.chatId + ".lastMessage"]: {
                 text,
+                className: "userChatMsg",
+                count: "countInfo",
             },
             [data.chatId + ".date"]: serverTimestamp(),
         });

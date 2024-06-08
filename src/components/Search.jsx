@@ -21,6 +21,7 @@ const Search = () => {
 
   const { currentUser } = useContext(AuthContext);
   const { dispatch } = useContext(ChatContext);
+  const { data } = useContext(ChatContext);
 
   const handleSearch = async () => {
     setUser(null);
@@ -64,6 +65,10 @@ const Search = () => {
             displayName: user.displayName,
             photoURL: user.photoURL,
           },
+          [combinedId + ".count"] : 0,
+          [combinedId + ".lastMessage"]: {
+            count: "count",
+          },
           [combinedId + ".date"]: serverTimestamp(),
         });
 
@@ -71,6 +76,10 @@ const Search = () => {
           [combinedId + ".userInfo"]: {
             displayName: currentUser.displayName,
             photoURL: currentUser.photoURL,
+          },
+          [combinedId + ".count"] : 0,
+          [combinedId + ".lastMessage"]: {
+            count: "count",
           },
           [combinedId + ".date"]: serverTimestamp(),
         });
