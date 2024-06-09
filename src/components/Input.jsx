@@ -62,23 +62,45 @@ const Input = () => {
             });
         }
 
-        await updateDoc(doc(db, "userChats", currentUser.displayName), {
-            [data.chatId + ".lastMessage"]: {
-                text,
-                count: 'count',
-            },
-            [data.chatId + ".date"]: serverTimestamp(),
-        });
+        if(text){
+            await updateDoc(doc(db, "userChats", currentUser.displayName), {
+                [data.chatId + ".lastMessage"]: {
+                    text,
+                    count: 'count',
+                },
+                [data.chatId + ".date"]: serverTimestamp(),
+            });
+    
+            await updateDoc(doc(db, "userChats", data.user.displayName), {
+                [data.chatId + ".count"]: cnt + 1,
+                [data.chatId + ".lastMessage"]: {
+                    text,
+                    className: "userChatMsg",
+                    count: "countInfo",
+                },
+                [data.chatId + ".date"]: serverTimestamp(),
+            });
+        }
+        else if(img) {
+            await updateDoc(doc(db, "userChats", currentUser.displayName), {
+                [data.chatId + ".lastMessage"]: {
+                    text: "Image",
+                    count: 'count',
+                },
+                [data.chatId + ".date"]: serverTimestamp(),
+            });
+    
+            await updateDoc(doc(db, "userChats", data.user.displayName), {
+                [data.chatId + ".count"]: cnt + 1,
+                [data.chatId + ".lastMessage"]: {
+                    text: "Image",
+                    className: "userChatMsg",
+                    count: "countInfo",
+                },
+                [data.chatId + ".date"]: serverTimestamp(),
+            });
+        }
 
-        await updateDoc(doc(db, "userChats", data.user.displayName), {
-            [data.chatId + ".count"]: cnt + 1,
-            [data.chatId + ".lastMessage"]: {
-                text,
-                className: "userChatMsg",
-                count: "countInfo",
-            },
-            [data.chatId + ".date"]: serverTimestamp(),
-        });
 
         setText("");
         setImg(null);

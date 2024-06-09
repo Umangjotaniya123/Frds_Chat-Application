@@ -14,7 +14,7 @@ export const ChatContextProvider = ({ children }) => {
     };
 
     const chatReducer = (state, action) => {
-    
+
         // console.log(action);
 
         switch (action.type) {
@@ -25,6 +25,11 @@ export const ChatContextProvider = ({ children }) => {
                         ? currentUser?.displayName + action.payload?.displayName
                         : action.payload?.displayName + currentUser?.displayName,
                 };
+            case "REMOVE_USER":
+                return {
+                    user: {},
+                    chatId: "null",
+                }
 
             default:
                 return state;

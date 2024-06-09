@@ -25,6 +25,8 @@ const Chats = () => {
   // console.log(Object.entries(chats));
 
   const handleSelect = async (u) => {
+    // console.log(u);
+
     dispatch({ type: "CHANGE_USER", payload: u.userInfo });
 
     const chats = Object.entries(document.getElementsByClassName("chats"))[0][1];
@@ -34,7 +36,6 @@ const Chats = () => {
         c.classList.remove("bgColor");
       }
     }
-    user.classList.add("bgColor");
 
     if (user.classList.contains("userChatMsg")) {
       user.classList.remove("userChatMsg");
@@ -50,8 +51,8 @@ const Chats = () => {
           count: "count",
         },
       });
-      console.log(user.classList);
     }
+    user.classList.add("bgColor");
 
 
   };
