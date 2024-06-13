@@ -3,6 +3,9 @@ import { AuthContext } from '../Context/AuthContext'
 import { ChatContext } from '../Context/ChatContext'
 import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
+import Photo from '../images/photo.png';
+import Seen from '../images/seen.png'
+import Send from '../images/send.png'
 
 const Chats = () => {
 
@@ -49,7 +52,12 @@ const Chats = () => {
         [chatId + ".lastMessage"]: {
           text: u.lastMessage.text,
           count: "count",
+          image: u.lastMessage.image,
         },
+      });
+      await updateDoc(doc(db, "userChats", u.userInfo.displayName), {
+        [chatId + ".send"]: "",
+        [chatId + ".seen"]: "seen",
       });
     }
     user.classList.add("bgColor");
@@ -70,10 +78,13 @@ const Chats = () => {
             <span>{chat[1].userInfo?.displayName}</span>
             <div className='msgInfo'>
               <div className="imgInfo">
-                {/* <img className={`${chat[1]?.send}`} src={Send} alt="" />
-                <img className={`${chat[1]?.seen}`} src={Seen} alt="" /> */}
+                <img className={`${chat[1]?.send}`} src={Send} alt="" />
+                <img className={`${chat[1]?.seen}`} src={Seen} alt="" />
               </div>
-              <p>{chat[1].lastMessage?.text}</p>
+              <div className='image'>
+                <img className={`${chat[1]?.lastMessage?.image}`} src={Photo} alt="" />
+                <p>{chat[1].lastMessage?.text}</p>
+              </div>
             </div>
           </div>
           <div className={`${chat[1]?.lastMessage?.count}`}>{chat[1]?.count}</div>

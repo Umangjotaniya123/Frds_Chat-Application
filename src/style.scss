@@ -178,8 +178,8 @@
             padding: 6px;
             border: none;
             cursor: pointer;
-            font-weight:600;
-            
+            font-weight: 600;
+
             >a {
               color: #ddddf7;
               text-decoration: none;
@@ -224,14 +224,32 @@
           background-color: #2f2d52;
         }
 
+        
         img {
           width: 50px;
           height: 50px;
           border-radius: 50%;
           object-fit: cover;
         }
+        .image {
+          display: flex;
+          align-items: center;
+          img {
+            filter: contrast(60%);
+            border-radius: 0px;
+            height: 15px;
+            width: 15px;
+            margin-right: 3px;
+            margin-left: 3px;
+            display: none;
+          }
+          .show{
+            display: flex;
+          }
+          
+        }
 
-        .count{
+        .count {
           display: none;
         }
       }
@@ -242,6 +260,7 @@
 
       .userChatInfo {
         width: 60%;
+
         span {
           font-size: 18px;
           font-weight: 500;
@@ -258,6 +277,7 @@
 
         .imgInfo {
           margin-top: 2px;
+
           img {
             height: 15px;
             display: none;
@@ -269,7 +289,7 @@
           }
 
           .seen {
-            display:inline;
+            display: inline;
           }
         }
 
@@ -279,9 +299,12 @@
           margin-left: 2px;
           // padding-left: 1px;
         }
+
+        
       }
 
-      
+
+
 
       .userChatMsg {
         p {
@@ -290,11 +313,12 @@
           color: rgb(255, 255, 255);
           font-style: italic;
         }
-        .countInfo{
+
+        .countInfo {
           align-items: center;
           justify-content: center;
           color: rgb(255, 255, 255);
-          background-color: #121038;//rgb(33, 5, 56);
+          background-color: #121038; //rgb(33, 5, 56);
           font-size: 13px;
           border-radius: 30px;
           margin: auto auto;
@@ -303,7 +327,7 @@
       }
     }
 
-    
+
 
 
 

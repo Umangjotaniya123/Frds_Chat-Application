@@ -87,7 +87,7 @@ const Search = () => {
     } catch (error) {}
 
     const chats = Object.entries(document.getElementsByClassName("chats"))[0][1];
-    const userChat = Object.entries(chats.getElementsByClassName(`${user.displayName}`))[0][1];
+    const userChat = Object.entries(document.getElementsByClassName(`${user?.displayName}`))[0][1];
     for (let c of chats.childNodes) {
       if(c.classList.contains("bgColor")){
         c.classList.remove("bgColor");

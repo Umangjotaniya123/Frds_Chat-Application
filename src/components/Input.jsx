@@ -62,40 +62,52 @@ const Input = () => {
             });
         }
 
-        if(text){
+        if (text) {
             await updateDoc(doc(db, "userChats", currentUser.displayName), {
+                [data.chatId + ".send"]: "send",
+                [data.chatId + ".seen"]: "",
                 [data.chatId + ".lastMessage"]: {
                     text,
                     count: 'count',
+                    image: img ? 'show' : '',
                 },
                 [data.chatId + ".date"]: serverTimestamp(),
             });
-    
+
             await updateDoc(doc(db, "userChats", data.user.displayName), {
+                [data.chatId + ".seen"]: "",
+                [data.chatId + ".send"]:  "",
                 [data.chatId + ".count"]: cnt + 1,
                 [data.chatId + ".lastMessage"]: {
                     text,
                     className: "userChatMsg",
                     count: "countInfo",
+                    image: img ? 'show' : '',
                 },
                 [data.chatId + ".date"]: serverTimestamp(),
             });
         }
-        else if(img) {
+        else if (img) {
             await updateDoc(doc(db, "userChats", currentUser.displayName), {
+                [data.chatId + ".seen"]: "",
+                [data.chatId + ".send"]: "send",
                 [data.chatId + ".lastMessage"]: {
                     text: "Image",
                     count: 'count',
+                    image: 'show',
                 },
                 [data.chatId + ".date"]: serverTimestamp(),
             });
-    
+
             await updateDoc(doc(db, "userChats", data.user.displayName), {
+                [data.chatId + ".seen"]: "",
+                [data.chatId + ".send"]:  "",
                 [data.chatId + ".count"]: cnt + 1,
                 [data.chatId + ".lastMessage"]: {
                     text: "Image",
                     className: "userChatMsg",
                     count: "countInfo",
+                    image: 'show',
                 },
                 [data.chatId + ".date"]: serverTimestamp(),
             });
