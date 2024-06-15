@@ -10,8 +10,10 @@ import Send from '../images/send.png'
 const Chats = () => {
 
   const [chats, setChats] = useState([]);
+  const [cnt, setCnt] = useState(null);
   const { currentUser } = useContext(AuthContext);
   const { dispatch } = useContext(ChatContext);
+  const { data } = useContext(ChatContext);
 
   useEffect(() => {
     const getChats = () => {
@@ -26,6 +28,11 @@ const Chats = () => {
   }, [currentUser.displayName]);
 
   // console.log(Object.entries(chats));
+
+  // useEffect(() => {
+  //   console.log(cnt);
+  //   // handleChange();
+  // }, [cnt]);
 
   const handleSelect = async (u) => {
     // console.log(u);
@@ -65,6 +72,42 @@ const Chats = () => {
 
   };
 
+  const handleChange = async (m) => {
+    // console.log(e);
+
+    if(m.lastMessage && m.userInfo){
+      const user = Object.entries(document.getElementsByClassName(`${m.userInfo.displayName}`));
+
+      if (data?.user.displayName === m.userInfo.displayName) {
+        const text = m.lastMessage?.text;
+        // const Id = m.lastMessage?.Id;
+        const chatId = currentUser.displayName > m.userInfo.displayName
+        ? currentUser.displayName + m.userInfo.displayName
+        : m.userInfo.displayName + currentUser.displayName;
+        // console.log(m);
+
+        if(!m.count && m.send === "" && m.seen === ""){
+          console.log(m);
+          await updateDoc(doc(db, "userChats", m.userInfo.displayName), {
+            [data.chatId + ".send"]: "",
+            [data.chatId + ".seen"]: "seen",
+          });
+        }
+        await updateDoc(doc(db, "userChats", currentUser.displayName), {
+          [chatId + ".count"]: 0,
+          [chatId + ".lastMessage"]: {
+            text,
+            count: "count",
+        },
+        });
+        user[0][1].classList.add("bgColor");
+
+      }
+
+    }
+    
+  }
+
   return (
     <div className="chats" >
       {Object.entries(chats)?.sort((a, b) => b[1].date - a[1].date).map((chat) => (
@@ -81,13 +124,13 @@ const Chats = () => {
                 <img className={`${chat[1]?.send}`} src={Send} alt="" />
                 <img className={`${chat[1]?.seen}`} src={Seen} alt="" />
               </div>
-              <div className='image'>
+              <div className='image' >
                 <img className={`${chat[1]?.lastMessage?.image}`} src={Photo} alt="" />
                 <p>{chat[1].lastMessage?.text}</p>
               </div>
             </div>
           </div>
-          <div className={`${chat[1]?.lastMessage?.count}`}>{chat[1]?.count}</div>
+          <div className={`${chat[1]?.lastMessage?.count}`} onChange={handleChange(chat[1])}>{chat[1]?.count}</div>
         </div>
       ))}
     </div>
