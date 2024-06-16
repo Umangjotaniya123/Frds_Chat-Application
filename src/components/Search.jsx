@@ -13,6 +13,7 @@ import {
 import { db } from "../firebase";
 import { AuthContext } from "../Context/AuthContext";
 import { ChatContext } from "../Context/ChatContext";
+import Message from "./Message";
 
 const Search = () => {
   const [username, setUsername] = useState("");
@@ -36,7 +37,7 @@ const Search = () => {
       querySnapshot.forEach((doc) => {
         setUser(doc.data());
       });
-    } catch (erroor) {
+    } catch (error) {
       setErr(true);
     }
   };
@@ -46,6 +47,7 @@ const Search = () => {
   };
 
   const handleSelect = async () => {
+
     //check whether the group(chats in firestore) exists, if not create
     dispatch({type: "CHANGE_USER", payload: user});
     const combinedId = currentUser.displayName > user.displayName
@@ -57,7 +59,9 @@ const Search = () => {
 
       if (!res.exists()) {
         //create a chat in chats collection
-        await setDoc(doc(db, "chats", combinedId), { messages: [] });
+        await setDoc(doc(db, "chats", combinedId), { 
+          messages: [],
+        });
 
         //create user chats
         await updateDoc(doc(db, "userChats", currentUser.displayName), {
@@ -84,16 +88,18 @@ const Search = () => {
           [combinedId + ".date"]: serverTimestamp(),
         });
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
 
     const chats = Object.entries(document.getElementsByClassName("chats"))[0][1];
-    const userChat = Object.entries(document.getElementsByClassName(`${user?.displayName}`))[0][1];
+    const userChat = Object.entries(document.getElementsByClassName(`${user?.displayName}`));
     for (let c of chats.childNodes) {
       if(c.classList.contains("bgColor")){
         c.classList.remove("bgColor");
       }
     }
-    userChat.classList.add("bgColor");
+    // userChat[0][1].classList.add("bgColor");
 
     setUser(null);
     setUsername("")

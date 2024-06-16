@@ -86,8 +86,7 @@ const Chats = () => {
         : m.userInfo.displayName + currentUser.displayName;
         // console.log(m);
 
-        if(!m.count && m.send === "" && m.seen === ""){
-          console.log(m);
+        if(!m.count && m.send === "" && m.seen === "" && m.lastMessage.text){
           await updateDoc(doc(db, "userChats", m.userInfo.displayName), {
             [data.chatId + ".send"]: "",
             [data.chatId + ".seen"]: "seen",
