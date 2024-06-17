@@ -48,6 +48,9 @@ const Search = () => {
 
   const handleSelect = async () => {
 
+    const obj = {
+    }
+
     //check whether the group(chats in firestore) exists, if not create
     dispatch({type: "CHANGE_USER", payload: user});
     const combinedId = currentUser.displayName > user.displayName
@@ -60,7 +63,8 @@ const Search = () => {
       if (!res.exists()) {
         //create a chat in chats collection
         await setDoc(doc(db, "chats", combinedId), { 
-          messages: [],
+          [currentUser.displayName]: [],
+          [user.displayName]: [],
         });
 
         //create user chats
@@ -99,7 +103,7 @@ const Search = () => {
         c.classList.remove("bgColor");
       }
     }
-    // userChat[0][1].classList.add("bgColor");
+    userChat[0][1].classList.add("bgColor");
 
     setUser(null);
     setUsername("")

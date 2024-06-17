@@ -62,10 +62,10 @@ const Chats = () => {
           image: u.lastMessage.image,
         },
       });
-      await updateDoc(doc(db, "userChats", u.userInfo.displayName), {
-        [chatId + ".send"]: "",
-        [chatId + ".seen"]: "seen",
-      });
+        await updateDoc(doc(db, "userChats", u.userInfo.displayName), {
+          [chatId + ".send"]: "",
+          [chatId + ".seen"]: "seen",
+        });
     }
     user.classList.add("bgColor");
 
@@ -74,19 +74,20 @@ const Chats = () => {
 
   const handleChange = async (m) => {
     // console.log(e);
+    const chatId = currentUser.displayName > m.userInfo.displayName
+        ? currentUser.displayName + m.userInfo.displayName
+        : m.userInfo.displayName + currentUser.displayName;
 
     if(m.lastMessage && m.userInfo){
       const user = Object.entries(document.getElementsByClassName(`${m.userInfo.displayName}`));
 
       if (data?.user.displayName === m.userInfo.displayName) {
-        const text = m.lastMessage?.text;
+        const text = m?.lastMessage?.text;
         // const Id = m.lastMessage?.Id;
-        const chatId = currentUser.displayName > m.userInfo.displayName
-        ? currentUser.displayName + m.userInfo.displayName
-        : m.userInfo.displayName + currentUser.displayName;
+        
         // console.log(m);
 
-        if(!m.count && m.send === "" && m.seen === "" && m.lastMessage.text){
+        if(!m.count && m.send === "" && m.seen === "" && m?.lastMessage?.text){
           await updateDoc(doc(db, "userChats", m.userInfo.displayName), {
             [data.chatId + ".send"]: "",
             [data.chatId + ".seen"]: "seen",
@@ -97,13 +98,20 @@ const Chats = () => {
           [chatId + ".lastMessage"]: {
             text,
             count: "count",
+            image: m.lastMessage.image,
         },
         });
         user[0][1].classList.add("bgColor");
 
       }
 
+      if(!m?.lastMessage?.text){
+        await updateDoc(doc(db, "userChats", currentUser.displayName), {
+          [chatId + ".seen"] : "",
+        });
+      }
     }
+
     
   }
 

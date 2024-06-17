@@ -39,18 +39,18 @@ const Chat = () => {
 
   const handleDelete = async () => {
     await updateDoc(doc(db, "chats", data.chatId), {
-      messages: []
+      [currentUser.displayName + ".messages"]: []
     });
 
-    await updateDoc(doc(db, "userChats", data.user.displayName), {
-      [data.chatId + ".count"]: 0,
-      [data.chatId + ".seen"]: "",
-      [data.chatId + ".send"]:  "",
-      [data.chatId + ".lastMessage"]: {
-        count: "count",
-        text: "",
-      },
-    });
+    // await updateDoc(doc(db, "userChats", data.user.displayName), {
+    //   [data.chatId + ".count"]: 0,
+    //   [data.chatId + ".seen"]: "",
+    //   [data.chatId + ".send"]:  "",
+    //   [data.chatId + ".lastMessage"]: {
+    //     count: "count",
+    //     text: "",
+    //   },
+    // });
 
     await updateDoc(doc(db, "userChats", currentUser.displayName), {
       [data.chatId + ".count"]: 0,
@@ -59,6 +59,7 @@ const Chat = () => {
       [data.chatId + ".lastMessage"]: {
         text: "",
         count: "count",
+        image: "",
       },
     });
 

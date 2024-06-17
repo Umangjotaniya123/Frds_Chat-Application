@@ -40,7 +40,14 @@ const Input = () => {
             await uploadBytesResumable(storageRef, img).then(() => {
                 getDownloadURL(storageRef).then(async (downloadURL) => {
                     await updateDoc(doc(db, 'chats', data.chatId), {
-                        messages: arrayUnion({
+                        [currentUser.displayName + ".messages"] : arrayUnion({
+                            id: uuid(),
+                            text,
+                            senderId: currentUser.displayName,
+                            date: Timestamp.now(),
+                            img: downloadURL,
+                        }),
+                        [data.user.displayName + ".messages"] : arrayUnion({
                             id: uuid(),
                             text,
                             senderId: currentUser.displayName,
@@ -53,7 +60,13 @@ const Input = () => {
         }
         else if (text) {
             await updateDoc(doc(db, "chats", data.chatId), {
-                messages: arrayUnion({
+                [currentUser.displayName + ".messages"]: arrayUnion({
+                    id: uuid(),
+                    text,
+                    senderId: currentUser.displayName,
+                    date: Timestamp.now(),
+                }),
+                [data.user.displayName + ".messages"]: arrayUnion({
                     id: uuid(),
                     text,
                     senderId: currentUser.displayName,
