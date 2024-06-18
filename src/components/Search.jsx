@@ -48,8 +48,11 @@ const Search = () => {
 
   const handleSelect = async () => {
 
-    const obj = {
-    }
+    const chats = Object.entries(document.getElementsByClassName("chats"))[0][1];
+    const sidebar = Object.entries(document.getElementsByClassName("sidebar"))[0][1];
+    const chat = Object.entries(document.getElementsByClassName("chat"))[0][1];
+    sidebar.classList.add("sidebar_mobile");
+    chat.classList.remove("chat_mobile");
 
     //check whether the group(chats in firestore) exists, if not create
     dispatch({type: "CHANGE_USER", payload: user});
@@ -96,7 +99,6 @@ const Search = () => {
       console.log(error);
     }
 
-    const chats = Object.entries(document.getElementsByClassName("chats"))[0][1];
     const userChat = Object.entries(document.getElementsByClassName(`${user?.displayName}`));
     for (let c of chats.childNodes) {
       if(c.classList.contains("bgColor")){

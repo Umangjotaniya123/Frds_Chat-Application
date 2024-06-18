@@ -27,19 +27,16 @@ const Chats = () => {
     currentUser.displayName && getChats();
   }, [currentUser.displayName]);
 
-  // console.log(Object.entries(chats));
-
-  // useEffect(() => {
-  //   console.log(cnt);
-  //   // handleChange();
-  // }, [cnt]);
-
   const handleSelect = async (u) => {
-    // console.log(u);
+
+    const chats = Object.entries(document.getElementsByClassName("chats"))[0][1];
+    const sidebar = Object.entries(document.getElementsByClassName("sidebar"))[0][1];
+    const chat = Object.entries(document.getElementsByClassName("chat"))[0][1];
+    sidebar.classList.add("sidebar_mobile");
+    chat.classList.remove("chat_mobile");
 
     dispatch({ type: "CHANGE_USER", payload: u.userInfo });
 
-    const chats = Object.entries(document.getElementsByClassName("chats"))[0][1];
     const user = Object.entries(chats.getElementsByClassName(`${u.userInfo.displayName}`))[0][1];
     for (let c of chats.childNodes) {
       if (c.classList.contains("bgColor")) {
@@ -117,7 +114,7 @@ const Chats = () => {
 
   return (
     <div className="chats" >
-      {Object.entries(chats)?.sort((a, b) => b[1].date - a[1].date).map((chat) => (
+      {Chats && Object.entries(chats)?.sort((a, b) => b[1].date - a[1].date).map((chat) => (
         <div
           className={`userChat ${chat[1]?.lastMessage?.className} ${chat[1].userInfo?.displayName}`}
           key={chat[0]}

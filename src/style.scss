@@ -124,11 +124,11 @@
     }
 
 
-    // .sidebar_mobile {
-    //   @include mobile_M() {
-    //     display: none;
-    //   }
-    // }
+    .sidebar_mobile {
+      @include mobile_M() {
+        display: none;
+      }
+    }
 
     .sidebar {
       flex: 1;
@@ -331,11 +331,11 @@
 
 
 
-    // .chat_mobile {
-    //   @include mobile_M() {
-    //     display: none;
-    //   }
-    // }
+    .chat_mobile {
+      @include mobile_M() {
+        display: none;
+      }
+    }
 
     .chat {
       flex: 2;

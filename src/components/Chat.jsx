@@ -28,10 +28,10 @@ const Chat = () => {
       }
     }
 
-    // const sidebar = Object.entries(document.getElementsByClassName("sidebar"))[0][1];
-    // const chat = Object.entries(document.getElementsByClassName("chat"))[0][1];
-    // sidebar.classList.remove("sidebar_mobile");
-    // chat.classList.add("chat_mobile");
+    const sidebar = Object.entries(document.getElementsByClassName("sidebar"))[0][1];
+    const chat = Object.entries(document.getElementsByClassName("chat"))[0][1];
+    sidebar.classList.remove("sidebar_mobile");
+    chat.classList.add("chat_mobile");
 
     navigate("/");
     // console.log(data);
