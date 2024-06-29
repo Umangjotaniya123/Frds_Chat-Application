@@ -79,6 +79,7 @@ const Search = () => {
           [combinedId + ".count"] : 0,
           [combinedId + ".lastMessage"]: {
             count: "count",
+            image: '',
           },
           [combinedId + ".date"]: serverTimestamp(),
         });
@@ -91,6 +92,7 @@ const Search = () => {
           [combinedId + ".count"] : 0,
           [combinedId + ".lastMessage"]: {
             count: "count",
+            image: '',
           },
           [combinedId + ".date"]: serverTimestamp(),
         });

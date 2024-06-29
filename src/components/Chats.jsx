@@ -10,7 +10,6 @@ import Send from '../images/send.png'
 const Chats = () => {
 
   const [chats, setChats] = useState([]);
-  const [cnt, setCnt] = useState(null);
   const { currentUser } = useContext(AuthContext);
   const { dispatch } = useContext(ChatContext);
   const { data } = useContext(ChatContext);
@@ -54,9 +53,9 @@ const Chats = () => {
       await updateDoc(doc(db, "userChats", currentUser.displayName), {
         [chatId + ".count"]: 0,
         [chatId + ".lastMessage"]: {
-          text: u.lastMessage.text,
+          text: u?.lastMessage?.text,
           count: "count",
-          image: u.lastMessage.image,
+          image: u?.lastMessage?.image,
         },
       });
         await updateDoc(doc(db, "userChats", u.userInfo.displayName), {
@@ -95,7 +94,7 @@ const Chats = () => {
           [chatId + ".lastMessage"]: {
             text,
             count: "count",
-            image: m.lastMessage.image,
+            image: m?.lastMessage?.image,
         },
         });
         user[0][1].classList.add("bgColor");
