@@ -21,9 +21,9 @@ export const ChatContextProvider = ({ children }) => {
             case "CHANGE_USER":
                 return {
                     user: action.payload,
-                    chatId: currentUser?.displayName > action.payload?.displayName
-                        ? currentUser?.displayName + action.payload?.displayName
-                        : action.payload?.displayName + currentUser?.displayName,
+                    chatId: currentUser.displayName > action.payload?.displayName
+                      ? (currentUser.displayName) + '_' + currentUser.uid + '_' + (action.payload?.displayName) + '_' + action.payload?.uid
+                      : (action.payload?.displayName) + '_' + action.payload?.uid + '_' + (currentUser.displayName) + '_' + currentUser.uid,
                 };
             case "REMOVE_USER":
                 return {

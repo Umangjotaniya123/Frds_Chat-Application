@@ -21,7 +21,7 @@ const Input = () => {
 
     useEffect(() => {
         const getChats = () => {
-            const unsub = onSnapshot(doc(db, "userChats", `${data.user.displayName}`), (doc) => {
+            const unsub = onSnapshot(doc(db, "userChats", `${data.user.displayName}_${data.user.uid}`), (doc) => {
                 setCnt(doc.data()[chatId]?.count);
             });
 
@@ -43,14 +43,14 @@ const Input = () => {
                         [currentUser.displayName + ".messages"] : arrayUnion({
                             id: uuid(),
                             text,
-                            senderId: currentUser.displayName,
+                            senderId: `${currentUser.displayName}_${currentUser.uid}`,
                             date: Timestamp.now(),
                             img: downloadURL,
                         }),
                         [data.user.displayName + ".messages"] : arrayUnion({
                             id: uuid(),
                             text,
-                            senderId: currentUser.displayName,
+                            senderId: `${currentUser.displayName}_${currentUser.uid}`,
                             date: Timestamp.now(),
                             img: downloadURL,
                         }),
@@ -63,20 +63,20 @@ const Input = () => {
                 [currentUser.displayName + ".messages"]: arrayUnion({
                     id: uuid(),
                     text,
-                    senderId: currentUser.displayName,
+                    senderId: `${currentUser.displayName}_${currentUser.uid}`,
                     date: Timestamp.now(),
                 }),
                 [data.user.displayName + ".messages"]: arrayUnion({
                     id: uuid(),
                     text,
-                    senderId: currentUser.displayName,
+                    senderId: `${currentUser.displayName}_${currentUser.uid}`,
                     date: Timestamp.now(),
                 }),
             });
         }
 
         if (text) {
-            await updateDoc(doc(db, "userChats", currentUser.displayName), {
+            await updateDoc(doc(db, "userChats", `${currentUser.displayName}_${currentUser.uid}`), {
                 [data.chatId + ".send"]: "send",
                 [data.chatId + ".seen"]: "",
                 [data.chatId + ".lastMessage"]: {
@@ -87,7 +87,7 @@ const Input = () => {
                 [data.chatId + ".date"]: serverTimestamp(),
             });
 
-            await updateDoc(doc(db, "userChats", data.user.displayName), {
+            await updateDoc(doc(db, "userChats", `${data.user.displayName}_${data.user.uid}`), {
                 [data.chatId + ".seen"]: "",
                 [data.chatId + ".send"]:  "",
                 [data.chatId + ".count"]: cnt + 1,
@@ -101,7 +101,7 @@ const Input = () => {
             });
         }
         else if (img) {
-            await updateDoc(doc(db, "userChats", currentUser.displayName), {
+            await updateDoc(doc(db, "userChats", `${currentUser.displayName}_${currentUser.uid}`), {
                 [data.chatId + ".seen"]: "",
                 [data.chatId + ".send"]: "send",
                 [data.chatId + ".lastMessage"]: {
@@ -112,7 +112,7 @@ const Input = () => {
                 [data.chatId + ".date"]: serverTimestamp(),
             });
 
-            await updateDoc(doc(db, "userChats", data.user.displayName), {
+            await updateDoc(doc(db, "userChats", `${data.user.displayName}_${data.user.uid}`), {
                 [data.chatId + ".seen"]: "",
                 [data.chatId + ".send"]:  "",
                 [data.chatId + ".count"]: cnt + 1,

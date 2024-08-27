@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   collection,
   query,
@@ -27,24 +27,33 @@ const Search = () => {
   const handleSearch = async () => {
     setUser(null);
     setErr(false);
+
+    let key = "displayName";
+    if(Number(username)) key = "phoneNumber";
+
     const q = query(
       collection(db, "users"),
-      where("displayName", "==", username)
+      where( key, '==', username)
     );
 
-    const querySnapshot = await getDocs(q);
     try {
+      const querySnapshot = await getDocs(q);
+
       querySnapshot.forEach((doc) => {
         setUser(doc.data());
       });
     } catch (error) {
       setErr(true);
     }
+
   };
 
   const handleKey = (e) => {
     e.code === "Enter" && handleSearch();
   };
+  // console.log(currentUser);
+  // console.log(user);
+  // console.log(data);
 
   const handleSelect = async () => {
 
@@ -55,55 +64,60 @@ const Search = () => {
     chat.classList.remove("chat_mobile");
 
     //check whether the group(chats in firestore) exists, if not create
-    dispatch({type: "CHANGE_USER", payload: user});
+    await dispatch({ type: "CHANGE_USER", payload: user });
     const combinedId = currentUser.displayName > user.displayName
-    ? currentUser.displayName + user.displayName
-    : user.displayName + currentUser.displayName;
+      ? (currentUser.displayName) + '_' + currentUser.uid + '_' + (user.displayName) + '_' + user.uid
+      : (user.displayName) + '_' + user.uid + '_' + (currentUser.displayName) + '_' + currentUser.uid;
+
 
     try {
       const res = await getDoc(doc(db, "chats", combinedId));
 
       if (!res.exists()) {
         //create a chat in chats collection
-        await setDoc(doc(db, "chats", combinedId), { 
+        await setDoc(doc(db, "chats", combinedId), {
           [currentUser.displayName]: [],
           [user.displayName]: [],
         });
 
         //create user chats
-        await updateDoc(doc(db, "userChats", currentUser.displayName), {
+        await updateDoc(doc(db, "userChats", `${currentUser.displayName}_${currentUser.uid}`), {
           [combinedId + ".userInfo"]: {
             displayName: user.displayName,
             photoURL: user.photoURL,
+            uid: user.uid,
           },
-          [combinedId + ".count"] : 0,
+          [combinedId + ".count"]: 0,
           [combinedId + ".lastMessage"]: {
             count: "count",
+            text: "",
             image: '',
           },
           [combinedId + ".date"]: serverTimestamp(),
         });
 
-        await updateDoc(doc(db, "userChats", user.displayName), {
+        await updateDoc(doc(db, "userChats", `${user.displayName}_${user.uid}`), {
           [combinedId + ".userInfo"]: {
             displayName: currentUser.displayName,
             photoURL: currentUser.photoURL,
+            uid: currentUser.uid,
           },
-          [combinedId + ".count"] : 0,
+          [combinedId + ".count"]: 0,
           [combinedId + ".lastMessage"]: {
             count: "count",
             image: '',
+            text: "",
           },
           [combinedId + ".date"]: serverTimestamp(),
         });
       }
     } catch (error) {
-      console.log(error);
+      setErr(true);
     }
 
     const userChat = Object.entries(document.getElementsByClassName(`${user?.displayName}`));
     for (let c of chats.childNodes) {
-      if(c.classList.contains("bgColor")){
+      if (c.classList.contains("bgColor")) {
         c.classList.remove("bgColor");
       }
     }
@@ -117,7 +131,7 @@ const Search = () => {
       <div className="searchForm">
         <input
           type="text"
-          placeholder="Find a user"
+          placeholder="Enter Number or Name"
           onKeyDown={handleKey}
           onChange={(e) => setUsername(e.target.value)}
           value={username}
@@ -129,6 +143,7 @@ const Search = () => {
           <img src={user.photoURL} alt="" />
           <div className="userChatInfo">
             <span>{user.displayName}</span>
+            <span>{user.number}</span>
           </div>
         </div>
       )}

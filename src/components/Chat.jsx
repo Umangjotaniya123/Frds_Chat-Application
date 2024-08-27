@@ -52,7 +52,7 @@ const Chat = () => {
     //   },
     // });
 
-    await updateDoc(doc(db, "userChats", currentUser.displayName), {
+    await updateDoc(doc(db, "userChats", `${currentUser.displayName}_${currentUser.uid}`), {
       [data.chatId + ".count"]: 0,
       [data.chatId + ".send"]: "",
       [data.chatId + ".seen"]: "",

@@ -13,14 +13,16 @@ const Register = () => {
   const [err, setErr] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
   const handleSubmite = async (e) => {
     e.preventDefault();
     setLoading(true);
     const displayName = e.target[0].value;
     const email = e.target[1].value;
     const password = e.target[2].value;
-    const file = e.target[3].files[0];
-    // console.log(displayName);
+    const number = e.target[3].value;
+    const file = e.target[4].files[0];
+    // console.log(number);
 
     try {
       //creat user...
@@ -40,19 +42,21 @@ const Register = () => {
               photoURL: downloadURL,
             });
             //create user on firestore
-            await setDoc(doc(db, "users", `${displayName}`), {
+            await setDoc(doc(db, "users", `${displayName}_${res.user.uid}`), {
+              uid: res.user.uid,
               displayName,
               email,
               photoURL: downloadURL,
               password: password,
+              phoneNumber: number,
             });
 
             //create empty user chats on firestore
-            await setDoc(doc(db, "userChats", `${displayName}`), {});
+            await setDoc(doc(db, "userChats", `${displayName}_${res.user.uid}`), {});
             navigate("/");
 
           } catch (error) {
-            console.log("err-", error);
+            // console.log("err-", error);
             setErr(true);
             setLoading(false);
           }
@@ -61,7 +65,7 @@ const Register = () => {
 
     } catch (error) {
       setErr(true);
-      console.log(error);
+      // console.log(error);
       setLoading(false);
     }
 
@@ -76,6 +80,7 @@ const Register = () => {
           <input required type="text" placeholder="display name" />
           <input required type="email" placeholder="email" />
           <input required type="password" placeholder="password" />
+          <input required type='tel' placeholder="Contact Number" />
           <input required style={{ display: "none" }} type="file" id="file" />
           <label htmlFor="file">
             <img src={Add} alt="" />
