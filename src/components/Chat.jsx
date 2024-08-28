@@ -18,15 +18,8 @@ const Chat = () => {
   const navigate = useNavigate();
   // console.log(data);
 
-  const handleClick = () => {
-    dispatch({ type: "REMOVE_USER", payload: {} });
-
-    const chats = Object.entries(document.getElementsByClassName("chats"))[0][1].childNodes;
-    for (let c of chats) {
-      if (c.classList.contains("bgColor")) {
-        c.classList.remove("bgColor");
-      }
-    }
+  const handleClick = async () => {
+    await dispatch({ type: "REMOVE_USER", payload: {} });
 
     const sidebar = Object.entries(document.getElementsByClassName("sidebar"))[0][1];
     const chat = Object.entries(document.getElementsByClassName("chat"))[0][1];
@@ -34,23 +27,12 @@ const Chat = () => {
     chat.classList.add("chat_mobile");
 
     navigate("/");
-    // console.log(data);
   }
 
   const handleDelete = async () => {
     await updateDoc(doc(db, "chats", data.chatId), {
       [currentUser.displayName + ".messages"]: []
     });
-
-    // await updateDoc(doc(db, "userChats", data.user.displayName), {
-    //   [data.chatId + ".count"]: 0,
-    //   [data.chatId + ".seen"]: "",
-    //   [data.chatId + ".send"]:  "",
-    //   [data.chatId + ".lastMessage"]: {
-    //     count: "count",
-    //     text: "",
-    //   },
-    // });
 
     await updateDoc(doc(db, "userChats", `${currentUser.displayName}_${currentUser.uid}`), {
       [data.chatId + ".count"]: 0,

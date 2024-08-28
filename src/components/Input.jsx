@@ -17,7 +17,6 @@ const Input = () => {
     const { currentUser } = useContext(AuthContext);
     const { data } = useContext(ChatContext);
     const chatId = data.chatId;
-    // console.log(data.chatId);
 
     useEffect(() => {
         const getChats = () => {
@@ -81,7 +80,6 @@ const Input = () => {
                 [data.chatId + ".seen"]: "",
                 [data.chatId + ".lastMessage"]: {
                     text,
-                    count: 'count',
                     image: img ? 'show' : '',
                 },
                 [data.chatId + ".date"]: serverTimestamp(),
@@ -93,8 +91,6 @@ const Input = () => {
                 [data.chatId + ".count"]: cnt + 1,
                 [data.chatId + ".lastMessage"]: {
                     text,
-                    className: "userChatMsg",
-                    count: "countInfo",
                     image: img ? 'show' : '',
                 },
                 [data.chatId + ".date"]: serverTimestamp(),
@@ -106,7 +102,6 @@ const Input = () => {
                 [data.chatId + ".send"]: "send",
                 [data.chatId + ".lastMessage"]: {
                     text: "Image",
-                    count: 'count',
                     image: 'show',
                 },
                 [data.chatId + ".date"]: serverTimestamp(),
@@ -118,8 +113,6 @@ const Input = () => {
                 [data.chatId + ".count"]: cnt + 1,
                 [data.chatId + ".lastMessage"]: {
                     text: "Image",
-                    className: "userChatMsg",
-                    count: "countInfo",
                     image: 'show',
                 },
                 [data.chatId + ".date"]: serverTimestamp(),

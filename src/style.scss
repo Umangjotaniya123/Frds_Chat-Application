@@ -248,16 +248,13 @@
           // }
           
         }
-
-        .count {
-          display: none;
-        }
       }
 
-      .bgColor {
-        background-color: #2f2d52;
-      }
+      // .bgColor {
+      //   background-color: #2f2d52;
+      // }
 
+    
       .userChatInfo {
         width: 60%;
         display: flex;
@@ -308,24 +305,23 @@
 
 
 
-      .userChatMsg {
-        p {
-          // font-weight:bold;
-          // font-size: 15px;
-          color: rgb(255, 255, 255);
-          font-style: italic;
-        }
-
-        .countInfo {
-          align-items: center;
-          justify-content: center;
-          color: rgb(255, 255, 255);
-          background-color: #121038; //rgb(33, 5, 56);
-          font-size: 13px;
-          border-radius: 30px;
-          margin: auto auto;
-          padding: 2px 5px;
-        }
+      // .userChatMsg {
+      //   p {
+      //     // font-weight:bold;
+      //     // font-size: 15px;
+      //     color: rgb(255, 255, 255);
+      //     font-style: italic;
+      //   }
+      // }
+      .countInfo {
+        align-items: center;
+        justify-content: center;
+        color: rgb(255, 255, 255);
+        background-color: #121038; //rgb(33, 5, 56);
+        font-size: 13px;
+        border-radius: 30px;
+        margin: auto auto;
+        padding: 2px 5px;
       }
     }
 

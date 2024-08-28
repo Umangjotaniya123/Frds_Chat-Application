@@ -14,6 +14,11 @@ const Chats = () => {
   const { dispatch } = useContext(ChatContext);
   const { data } = useContext(ChatContext);
 
+  const style = {
+    color: 'rgb(255, 255, 255)',
+    fontStyle: 'italic',
+  };
+
   useEffect(() => {
     const getChats = () => {
       const unsub = onSnapshot(doc(db, 'userChats', `${currentUser.displayName}_${currentUser.uid}`), (chat) => {
@@ -26,12 +31,8 @@ const Chats = () => {
     currentUser.displayName && getChats();
   }, [currentUser.displayName]);
 
-  // console.log(data);
-  // console.log(currentUser);
-
   const handleSelect = async (u) => {
 
-    const chats = Object.entries(document.getElementsByClassName("chats"))[0][1];
     const sidebar = Object.entries(document.getElementsByClassName("sidebar"))[0][1];
     const chat = Object.entries(document.getElementsByClassName("chat"))[0][1];
     sidebar.classList.add("sidebar_mobile");
@@ -39,30 +40,17 @@ const Chats = () => {
 
     await dispatch({ type: "CHANGE_USER", payload: u.userInfo });
 
-    const user = Object.entries(chats.getElementsByClassName(`${u.userInfo.displayName}`))[0][1];
-    for (let c of chats.childNodes) {
-      if (c.classList.contains("bgColor")) {
-        c.classList.remove("bgColor");
-      }
-    }
-
-
-
-    if (user.classList.contains("userChatMsg")) {
-      user.classList.remove("userChatMsg");
-      // const chatId = data.chatId;
+    if (u.count > 0) {
       const chatId = currentUser.displayName > u.userInfo.displayName
         ? (currentUser.displayName) + '_' + currentUser.uid + '_' + (u.userInfo.displayName) + '_' + u.userInfo.uid
         : (u.userInfo.displayName) + '_' + u.userInfo.uid + '_' + (currentUser.displayName) + '_' + currentUser.uid;
       let text = "";
       if (u?.lastMessage?.text) text = u.lastMessage.text;
 
-      // console.log(chatId);
       await updateDoc(doc(db, "userChats", `${currentUser.displayName}_${currentUser.uid}`), {
         [chatId + ".count"]: 0,
         [chatId + ".lastMessage"]: {
           text,
-          count: "count",
           image: u?.lastMessage?.image,
         },
       });
@@ -71,27 +59,19 @@ const Chats = () => {
         [chatId + ".seen"]: "seen",
       });
     }
-    user.classList.add("bgColor");
-
-
   };
 
   const handleChange = async (m) => {
-    // console.log(e);
-    
+
     if (m.lastMessage && m.userInfo) {
       const chatId = currentUser.displayName > m?.userInfo?.displayName
         ? (currentUser.displayName) + '_' + currentUser.uid + '_' + (m?.userInfo?.displayName) + '_' + m?.userInfo?.uid
         : (m?.userInfo?.displayName) + '_' + m?.userInfo?.uid + '_' + (currentUser.displayName) + '_' + currentUser.uid;
-      const user = Object.entries(document.getElementsByClassName(`${m.userInfo.displayName}`));
 
       if (data?.user.displayName === m.userInfo.displayName) {
         const text = m?.lastMessage?.text;
-        // const Id = m.lastMessage?.Id;
 
-        // console.log(m);
-
-        if(!m.count && m.send === "" && m.seen === "" && m?.lastMessage?.text){
+        if (!m.count && m.send === "" && m.seen === "" && m?.lastMessage?.text) {
           await updateDoc(doc(db, "userChats", `${m.userInfo.displayName}_${m.userInfo.uid}`), {
             [chatId + ".send"]: "",
             [chatId + ".seen"]: "seen",
@@ -101,12 +81,9 @@ const Chats = () => {
           [chatId + ".count"]: 0,
           [chatId + ".lastMessage"]: {
             text,
-            count: "count",
             image: m?.lastMessage?.image,
           },
         });
-        if (user !== undefined) user[0][1].classList.add("bgColor");
-
       }
 
       if (!m?.lastMessage?.text) {
@@ -123,25 +100,31 @@ const Chats = () => {
     <div className="chats" >
       {Chats && Object.entries(chats)?.sort((a, b) => b[1].date - a[1].date).map((chat) => (
         <div
-          className={`userChat ${chat[1]?.lastMessage?.className} ${chat[1].userInfo?.displayName}`}
+          className={`userChat ${chat[1].userInfo?.displayName}`}
           key={chat[0]}
           onClick={() => handleSelect(chat[1])}
+          style={
+            data?.user.displayName === chat[1].userInfo?.displayName ? 
+            {backgroundColor: '#2f2d52'} : {}
+          }
         >
           <img src={chat[1].userInfo?.photoURL} alt="" />
           <div className="userChatInfo">
             <span>{chat[1].userInfo?.displayName}</span>
             <div className='msgInfo'>
               <div className="imgInfo">
-                {chat[1]?.send && <img src={Send} alt="" /> }
-                {chat[1]?.seen && <img src={Seen} alt="" /> }
+                {chat[1]?.send && <img src={Send} alt="" />}
+                {chat[1]?.seen && <img src={Seen} alt="" />}
               </div>
               <div className='image' >
-                {chat[1]?.lastMessage?.image && <img src={Photo} alt="" /> }
-                <p>{chat[1]?.lastMessage?.text}</p>
+                {chat[1]?.lastMessage?.image && <img src={Photo} alt="" />}
+                <p onChange={handleChange(chat[1])} style={
+                  chat[1]?.count > 0 ? style : {}
+                }>{chat[1]?.lastMessage?.text}</p>
               </div>
             </div>
           </div>
-          <div className={`${chat[1]?.lastMessage?.count}`} onChange={handleChange(chat[1])}>{chat[1]?.count}</div>
+          {chat[1]?.count > 0 && <div className='countInfo'>{chat[1]?.count}</div>}
         </div>
       ))}
     </div>

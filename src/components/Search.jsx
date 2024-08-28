@@ -51,9 +51,6 @@ const Search = () => {
   const handleKey = (e) => {
     e.code === "Enter" && handleSearch();
   };
-  // console.log(currentUser);
-  // console.log(user);
-  // console.log(data);
 
   const handleSelect = async () => {
 

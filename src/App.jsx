@@ -1,10 +1,10 @@
-import { Children, useContext, useState } from 'react'
-import Register from "./pages/Register"
-import Login from "./pages/Login"
-import Home from "./pages/Home"
-import "./style.scss";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useContext } from 'react';
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthContext } from './Context/AuthContext';
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import "./style.scss";
 
 function App() {
 
@@ -38,4 +38,4 @@ function App() {
   );
 }
 
-export default App
+export default App;
